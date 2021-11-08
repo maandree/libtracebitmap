@@ -1,0 +1,2 @@
+Library for tracing bitmaps (black-and-white pictures) into vectors.
+This is primarily indented for converting bitmap fonts into vector fonts.
