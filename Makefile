@@ -50,6 +50,7 @@ install: libtracebitmap.a libtracebitmap.$(LIBEXT)
 	mkdir -p -- "$(DESTDIR)$(PREFIX)/include"
 	cp -- libtracebitmap.a "$(DESTDIR)$(PREFIX)/lib/"
 	cp -- libtracebitmap.$(LIBEXT) "$(DESTDIR)$(PREFIX)/lib/libtracebitmap.$(LIBMINOREXT)"
+	$(FIX_INSTALL_NAME) "$(DESTDIR)$(PREFIX)/lib/libtracebitmap.$(LIBMINOREXT)"
 	ln -sf -- libtracebitmap.$(LIBMINOREXT) "$(DESTDIR)$(PREFIX)/lib/libtracebitmap.$(LIBMAJOREXT)"
 	ln -sf -- libtracebitmap.$(LIBMAJOREXT) "$(DESTDIR)$(PREFIX)/lib/libtracebitmap.$(LIBEXT)"
 	cp -- libtracebitmap.h "$(DESTDIR)$(PREFIX)/include/"
