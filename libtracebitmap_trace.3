@@ -1,0 +1,144 @@
+.TH LIBTRACEBITMAP_TRACE 3 LIBTRACEBITMAP
+.SH NAME
+libtracebitmap_trace \- Vectorise a bitmap
+.SH SYNOPSIS
+.nf
+#include <libtracebitmap.h>
+
+#define LIBTRACEBITMAP_INK_OFF 0
+#define LIBTRACEBITMAP_INK_ON  1
+
+struct libtracebitmap_bitmap {
+	size_t \fIheight\fP;
+	size_t \fIwidth\fP;
+	uint8_t *\fIimage\fP;
+};
+
+int libtracebitmap_trace(
+	struct libtracebitmap_bitmap *\fIbitmap\fP,
+	int (*\fInew_component\fP)(int \fInegative\fP, void *\fIuser_data\fP),
+	int (*\fInew_stop\fP)(size_t \fIy\fP, size_t \fIx\fP, void *\fIuser_data\fP),
+	int (*\fIcomponent_finished\fP)(void *\fIuser_data\fP),
+	void *\fIuser_data\fP);
+.fi
+.PP
+Link with
+.IR -ltracebitmap .
+.SH DESCRIPTION
+The
+.B libtracebitmap_trace
+function vectorises a bitmap image into horizonal and
+vertical vectors.
+.PP
+The image to vectorise is given via the
+.I bitmap
+parameter.
+.I bitmap->height
+shall be the bitmap's height, measured in pixels, and
+.I bitmap->width
+shall be the bitmap's width.
+.I bitmap->image
+shall be a pointer to a memory segment of
+.I bitmap->height*bitmap->width
+.BR uint8_t s,
+here for an y-position
+.I y
+and an x-position
+.I x
+the ink status of the pixel at that position is
+specified by the value of
+.IR bitmap->image[y*bitmap->width+x] ,
+which shall have the value
+.I LIBTRACEBITMAP_INK_OFF
+if the image is transparent at that pixel and
+.I LIBTRACEBITMAP_INK_ON
+if the image is opaque at that pixel, no other
+values are allowed. The contents of
+.IR bitmap->image
+will be erased during execution (which stops
+whenever a callback function returns a non-zero
+value), however the memory is not deallocated.
+.PP
+.I *new_component
+shall be a callback function for
+.B libtracebitmap_trace
+to invoke whenever it starts tracing a new
+part of the bitmap, which it will only do at
+the beginning or immediately after finishing
+tracing a part indicated by a previous call to
+the callback function. Its
+.I negative
+parameter will be 0 if the traced area shall
+be drawn, and 1 if the traced area shall be
+erased from a previously drawn area. It is safe
+to ignore this argument and draw with XOR.
+.PP
+The
+.B libtracebitmap_trace
+function will call
+.I *component_finished
+when it has traced a part of the bitmap, at
+this point, the application shall connect the
+the stop indicated by the first invocation to
+.IR *new_stop ,
+after the previous invocation of
+.IR *new_component ,
+and the stop indicated by the previous
+invocation to
+.IR *new_stop .
+.PP
+After invoking
+.I *new_component
+but before the corresponding invocation of
+.IR *component_finished ,
+the
+.B libtracebitmap_trace
+function will invoke
+.I *new_stop
+at least four times, each time indicating a stop
+in the vectorisation adjacent to the previous stop
+(or in the case of the first stop since the previous
+invocation of
+.IR *new_component ,
+the last stop before the next invocation of
+.IR *component_component ).
+The adjacent stops creates a vector which will not
+cross any other vector, however two stops may share
+location. Each stop's location is indicated by the
+.I y
+(values will be integers in [0,
+.IR bitmap->height ])
+and
+.I x
+(values will be integers in [0,
+.IR bitmap->width ])
+arguments.
+.PP
+.I user_data
+will be passed on as is as the last argument to
+.IR *new_component ,
+.IR *new_stop ,
+and
+.IR *component_finished .
+.PP
+Only
+.I user_data
+parameter may be
+.IR NULL .
+.SH RETURN VALUE
+The
+.B libtracebitmap_trace
+function will return any non-zero value returned by a
+callback function, indicating failure; if all invocations
+to callback functions return zero, the function returns
+zero indicating successful completion.
+.SH ERRORS
+The
+.B libtracebitmap_trace
+function cannot itself fail and will not modify
+.IR errno ,
+it will however let its callback functions modify
+.IR errno .
+.SH SEE ALSO
+.BR libtracebitmap (7),
+.BR libtracebitmap.h (0)

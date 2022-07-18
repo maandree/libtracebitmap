@@ -1,0 +1,36 @@
+.TH LIBTRACEBITMAP.H 0 LIBTRACEBITMAP
+.SH NAME
+libtracebitmap.h \- Bitmap vectorisation library header
+.SH SYNOPSIS
+.nf
+#include <libtracebitmap.h>
+.fi
+.PP
+Link with
+.IR -ltracebitmap .
+.SH DESCRIPTION
+The
+.B <libtracebitmap.h>
+header file defines structures, macros, and functions for
+vectorising bitmaps into horizontal and vertical vectors.
+.PP
+This header defines the following function:
+.TP
+.BR libtracebitmap_trace (3)
+Vectorise a bitmap.
+.PP
+This header defines the following structures:
+.TP
+.B struct libtracebitmap_bitmap
+Bitmap image with size information.
+.PP
+This header defines the following value macros:
+.TP
+.B LIBTRACEBITMAP_INK_OFF
+Ink-off value (display background) for bitmap pixels.
+.TP
+.B LIBTRACEBITMAP_INK_ON
+Ink-on value (display foreground) for bitmap pixels.
+.SH SEE ALSO
+.BR libtracebitmap (7),
+.BR libtracebitmap_trace (3)
