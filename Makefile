@@ -36,6 +36,7 @@ MAN7 =\
 	libtracebitmap.7
 
 LOBJ = $(OBJ:.o=.lo)
+SRC = $(OBJ:.o=.c)
 
 
 all: libtracebitmap.a libtracebitmap.$(LIBEXT) demo
