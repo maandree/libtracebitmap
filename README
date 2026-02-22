@@ -4,7 +4,7 @@ NAME
 DESCRIPTION
 	libtracebitmap is a C library for tracing bitmaps
 	(monochrome raster images) into vectors, and is
-	primarily intented for converting bitmap fonts into
+	primarily intended for converting bitmap fonts into
 	vector fonts, and will therefore only create horizontal
 	and vertical vectors.
 

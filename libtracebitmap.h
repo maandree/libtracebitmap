@@ -7,12 +7,12 @@
 
 
 /**
- * The background is show for pixels with this value
+ * The background is shown for pixels with this value
  */
 #define LIBTRACEBITMAP_INK_OFF 0
 
 /**
- * The foreground is show for pixels with this value
+ * The foreground is shown for pixels with this value
  */
 #define LIBTRACEBITMAP_INK_ON  1
 
@@ -47,7 +47,7 @@ struct libtracebitmap_bitmap {
 /**
  * Vectorise a bitmap
  *
- * @param  bitmap              The bitmap to vectorise; `bitmap->image` will be
+ * @param  bitmap              The bitmap to vectorise; `bitmap->image` will
  *                             be erased, but not deallocated
  * @param  new_component       Callback function that will be called each time the function
  *                             starts vectorising a separate component in the bitmap; the
@@ -63,14 +63,14 @@ struct libtracebitmap_bitmap {
  *                             argument will be the node's x-position (0 at the far left,
  *                             positive rightwards); the third argument will be `user_data`;
  *                             the callback function shall return 0 upon successful completion
- *                             and any other value on failure: Lines between adjecent nodes
+ *                             and any other value on failure: Lines between adjacent nodes
  *                             within the same component (the initial and the final nodes are
  *                             adjacent) are always either horizontal or vertical, with no
  *                             other nodes between the them.
  * @param  component_finished  Callback function that is called each time the function is
  *                             finished with a component. The function will only vectorise
  *                             one component at a time, so after calling this callback, the
- *                             function will either return or immediate call `*new_component`,
+ *                             function will either return or immediately call `*new_component`,
  *                             and after calling `*new_component`, it will never `*new_component`
  *                             again before calling `*component_finished`; additionally,
  *                             `*component_finished` is called once for every call to

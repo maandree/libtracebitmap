@@ -79,7 +79,7 @@ function will call
 .I *component_finished
 when it has traced a part of the bitmap, at
 this point, the application shall connect the
-the stop indicated by the first invocation to
+stop indicated by the first invocation to
 .IR *new_stop ,
 after the previous invocation of
 .IR *new_component ,
@@ -101,8 +101,8 @@ in the vectorisation adjacent to the previous stop
 invocation of
 .IR *new_component ,
 the last stop before the next invocation of
-.IR *component_component ).
-The adjacent stops creates a vector which will not
+.IR *new_component ).
+The adjacent stops create a vector which will not
 cross any other vector, however two stops may share
 location. Each stop's location is indicated by the
 .I y
