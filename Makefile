@@ -39,9 +39,11 @@ LOBJ = $(OBJ:.o=.lo)
 SRC = $(OBJ:.o=.c)
 
 
-all: libtracebitmap.a libtracebitmap.$(LIBEXT) demo
+all: libtracebitmap.a libtracebitmap.$(LIBEXT) demo test
 $(OBJ): $(HDR)
 $(LOBJ): $(HDR)
+demo: demo.o
+test: test.o
 
 .c.o:
 	$(CC) -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
@@ -49,8 +51,8 @@ $(LOBJ): $(HDR)
 .c.lo:
 	$(CC) -fPIC -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
 
-demo: demo.o libtracebitmap.a
-	$(CC) -o $@ demo.o libtracebitmap.a $(CFLAGS) $(CPPFLAGS)
+demo test: libtracebitmap.a
+	$(CC) -o $@ $@.o libtracebitmap.a $(CFLAGS) $(CPPFLAGS)
 
 libtracebitmap.a: $(OBJ)
 	@rm -f -- $@
@@ -58,6 +60,9 @@ libtracebitmap.a: $(OBJ)
 
 libtracebitmap.$(LIBEXT): $(LOBJ)
 	$(CC) $(LIBFLAGS) -o $@ $(LOBJ) $(LDFLAGS)
+
+check: test
+	./test
 
 install: libtracebitmap.a libtracebitmap.$(LIBEXT)
 	mkdir -p -- "$(DESTDIR)$(PREFIX)/lib"
@@ -87,9 +92,9 @@ uninstall:
 
 clean:
 	-rm -f -- *.o *.a *.lo *.su *.so *.so.* *.dll *.dylib
-	-rm -f -- *.gch *.gcov *.gcno *.gcda *.$(LIBEXT) demo
+	-rm -f -- *.gch *.gcov *.gcno *.gcda *.$(LIBEXT) demo test
 
 .SUFFIXES:
 .SUFFIXES: .lo .o .c
 
-.PHONY: all install uninstall clean
+.PHONY: all check install uninstall clean
