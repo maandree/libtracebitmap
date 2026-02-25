@@ -21,6 +21,8 @@
 #define BOTTOM_COVERED 0x2
 #define LEFT_COVERED   0x4
 #define RIGHT_COVERED  0x8
+#define VERT_COVERED   0x3
+#define HORZ_COVERED   0xC
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -167,6 +169,8 @@ cb_new_stop(size_t y, size_t x, void *user_data)
 				coverage |= (i != MAX(x, x0)) * RIGHT_COVERED;
 				EXPECT(!(ctx->edges[y * EXT_WIDTH + i] & coverage));
 				ctx->edges[y * EXT_WIDTH + i] |= coverage;
+				if (coverage == HORZ_COVERED)
+					EXPECT((ctx->edges[y * EXT_WIDTH + i] & VERT_COVERED) != VERT_COVERED);
 			}
 		} else {
 			for (i = MIN(y, y0), n = MAX(y, y0);; i++) {
@@ -174,6 +178,8 @@ cb_new_stop(size_t y, size_t x, void *user_data)
 				coverage |= (i != MAX(y, y0)) * BOTTOM_COVERED;
 				EXPECT(!(ctx->edges[i * EXT_WIDTH + x] & coverage));
 				ctx->edges[i * EXT_WIDTH + x] |= coverage;
+				if (coverage == VERT_COVERED)
+					EXPECT((ctx->edges[i * EXT_WIDTH + x] & HORZ_COVERED) != HORZ_COVERED);
 				if (i == n)
 					break;
 				flip_row_right(ctx->out, i, x);
